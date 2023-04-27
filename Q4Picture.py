@@ -2,45 +2,25 @@ import pygame
 
 pygame.init()
 
-screen_width, screen_height = 640, 480
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((720, 700))
 
-colors = {
-    "blade": (70, 70, 70), # Dark gray
-    "crossguard": (0, 255, 160), # Light blue
-    "grip": (0, 255, 255) # Light gray
-}
+shield_rect = pygame.draw.ellipse(screen, (220, 20, 60), (220, 115, 200, 250))
+pygame.draw.ellipse(screen, (70, 70, 70), shield_rect, 5)
 
-sword_dims = {
-    "blade_length": 80,
-    "blade_width": 25,
-    "grip_length": 250,
-    "grip_width": 20,
-    "crossguard_length": 100,
-    "crossguard_width": 10,
-    "crossguard_height": 20
-}
+symbol_center = (shield_rect.centerx, shield_rect.centery - 8)
+pygame.draw.circle(screen, (219, 172, 52), symbol_center, 50)
+pygame.draw.circle(screen, (70, 70, 70), symbol_center, 50, 2)
 
-sword_x, sword_y = screen_width // 1.8, screen_height - 50
+for angle in range(0, 360, 45):
+    start_pos = pygame.math.Vector2(symbol_center) + pygame.math.Vector2(0, -40).rotate(angle)
+    end_pos = start_pos + pygame.math.Vector2(0, -25).rotate(angle)
+    pygame.draw.line(screen, (219, 172, 52), start_pos, end_pos, 10)
 
-# Draw sword
-blade_points = [(sword_x - sword_dims["blade_width"]//2, sword_y), 
-                (sword_x + sword_dims["blade_width"]//2, sword_y),
-                (sword_x + sword_dims["blade_width"]//2, sword_y - sword_dims["blade_length"]),
-                (sword_x - sword_dims["blade_width"]//2, sword_y - sword_dims["blade_length"])]
-pygame.draw.polygon(screen, colors["blade"], blade_points)
+for angle_start, angle_end in [(45, 90), (135, 180), (225, 270), (315, 360)]:
+    pygame.draw.arc(screen, (219, 172, 52), (symbol_center[0] - 30, symbol_center[1] - 30, 60, 60), angle_start, angle_end, 10)
 
-crossguard_points = [(sword_x - sword_dims["crossguard_length"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"]),
-                     (sword_x + sword_dims["crossguard_length"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"]),
-                     (sword_x + sword_dims["crossguard_length"]//2, sword_y - sword_dims["blade_length"]),
-                     (sword_x - sword_dims["crossguard_length"]//2, sword_y - sword_dims["blade_length"])]
-pygame.draw.polygon(screen, colors["crossguard"], crossguard_points)
-
-grip_points = [(sword_x - sword_dims["grip_width"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"] - sword_dims["grip_length"]),
-               (sword_x + sword_dims["grip_width"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"] - sword_dims["grip_length"]),
-               (sword_x + sword_dims["grip_width"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"]),
-               (sword_x - sword_dims["grip_width"]//2, sword_y - sword_dims["blade_length"] - sword_dims["crossguard_height"])]
-pygame.draw.polygon(screen, colors["grip"], grip_points)
+pygame.draw.circle(screen, (150, 150, 150), symbol_center, 30)
+pygame.draw.circle(screen, (50, 50, 50), symbol_center, 50, 2)
 
 pygame.display.update()
 
